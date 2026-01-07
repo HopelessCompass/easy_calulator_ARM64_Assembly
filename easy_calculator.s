@@ -41,3 +41,16 @@ add x1, x1, input@PAGEOFF
 mov x2, #256
 svc #0x80
 bl .exit
+
+//say goodbye and close
+.exit:
+mov x0, #1
+adrp x1, exit_txt@PAGE
+add x1, x1, exit_txt@PAGEOFF
+mov x2, #5
+mov x16, #4
+svc #0x80
+
+mov x0, #0
+mov x16, #1
+svc #0x80
