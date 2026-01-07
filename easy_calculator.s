@@ -36,5 +36,3 @@ adrp x1, input@PAGE
 add x1, x1, input@PAGEOFF
 mov x2, #256
 bl _read
-cmp x0, #0
-
