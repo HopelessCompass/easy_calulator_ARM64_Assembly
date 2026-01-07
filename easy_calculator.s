@@ -5,6 +5,8 @@ second_txt:
     .ascii "Enter second number\n"
 action_txt:
     .ascii "Enter you action (+,-)\n"
+exit_txt:
+    .ascii "Bye!\n"
 action_plus:
     .ascii "+"
 action_minus:
@@ -14,6 +16,8 @@ input:
 output:
     .space 256
 num1:
+    .quad 0
+num2:
     .quad 0
 
 .text
@@ -35,4 +39,5 @@ mov x0, #0
 adrp x1, input@PAGE
 add x1, x1, input@PAGEOFF
 mov x2, #256
-bl _read
+svc #0x80
+bl .exit
