@@ -17,8 +17,6 @@ output:
     .space 256
 num1:
     .quad 0
-num2:
-    .quad 0
 
 .text
 .p2align 2
@@ -40,17 +38,43 @@ adrp x1, input@PAGE
 add x1, x1, input@PAGEOFF
 mov x2, #256
 svc #0x80
-bl .exit
 
-//say goodbye and close
-.exit:
+//preparation for converting atoi
+adrp x0, input@PAGE
+add x0, x0, input@PAGEOFF
+mov x5, #0
+mov x10, x10
+
+//parse loop cycle from ASCII to number
+atoi:
+ldrb w3, [x0]
+
+cmp w3, #'0'
+b.lt atoi_done
+cmp w3, #'9'
+b.gt atoi_done
+
+sub w3, w3, #'0'
+uxtw x3, w3
+madd x5, x5, x10, x3
+add x0, x0, #1
+b atoi
+
+//done parsing and storing ready number
+atoi_done:
+adrp x11, num1@PAGE
+add x11, x11, num1@PAGEOFF
+str x5, [x11]
+
+//say goodbye and quit
+exit:
 mov x0, #1
 adrp x1, exit_txt@PAGE
 add x1, x1, exit_txt@PAGEOFF
 mov x2, #5
 mov x16, #4
 svc #0x80
-
+//quit
 mov x0, #0
 mov x16, #1
 svc #0x80
